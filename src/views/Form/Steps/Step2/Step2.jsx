@@ -10,10 +10,11 @@ export const Step2 = ({ visible, updateCompletion }) => {
   const [isSelectOpen, setIsSelectOpen] = useState();
 
   const handleSelectChange = (value) => {
+    console.log(value);
     setState({
       ...state,
       status: value,
-      description: '',
+      description: value === 'transfer' ? '' : state.description,
       transferDate: '',
     });
   };
