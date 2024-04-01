@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import {
   Wrapper,
   ModalHeader,
@@ -9,20 +8,12 @@ import {
   Block,
   Title,
   Text,
-  ModalDrag,
-  RequestPhotos,
 } from './RequestModal.styled';
 import { useStore } from '../../store/StoreContext';
-import { Button, FileInput, Slider } from '../../components';
+import { Button, Slider } from '../../components';
 
 export const RequestModal = ({ modalContentRef }) => {
   const { state, setState, requestData } = useStore();
-  const [isDragging, setIsDragging] = useState(false);
-  const [startY, setStartY] = useState(0);
-  const [startTime, setStartTime] = useState(0);
-  const [deltaY, setDeltaY] = useState(0);
-
-  useEffect(() => {}, []);
 
   const closeModal = () => {
     setState({
@@ -31,43 +22,10 @@ export const RequestModal = ({ modalContentRef }) => {
     });
   };
 
-  const handleTouchStart = (e) => {
-    setIsDragging(true);
-    setStartY(e.touches[0].clientY);
-    setStartTime(new Date());
-  };
-
-  const handleTouchMove = (e) => {
-    if (isDragging) {
-      const newDeltaY = startY - e.touches[0].clientY;
-      setDeltaY(newDeltaY);
-      modalContentRef.current.style.transform = `translateY(${-newDeltaY * 0.99}px)`;
-      modalContentRef.current.style.transition = `none`;
-    }
-  };
-
-  const handleTouchEnd = () => {
-    const endTime = new Date();
-    const timeDiff = endTime - startTime;
-
-    modalContentRef.current.style.transition = `transform 0.2s linear`;
-    if (deltaY <= -150 || timeDiff < 300) {
-      closeModal();
-    }
-    modalContentRef.current.style.transform = `translateY(0px)`;
-    setIsDragging(false);
-    setStartTime(0);
-  };
-
   return (
     <Wrapper isOpen={state.isRequestModalOpen}>
       <ModalContent ref={modalContentRef}>
-        <ModalHeader
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <ModalDrag />
+        <ModalHeader>
           <ModalHeaderText>Подробная информация о заявке</ModalHeaderText>
           <CloseIcon onClick={closeModal} />
         </ModalHeader>

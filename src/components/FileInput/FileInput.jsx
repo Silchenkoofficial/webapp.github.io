@@ -1,10 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '../Button';
-import { Wrapper, AddPhotoIcon, InputWarning } from './FileInput.styled';
+import {
+  Wrapper,
+  AddPhotoIcon,
+  InputWarning,
+  AlertIcon,
+} from './FileInput.styled';
 import { Slider } from '../../components';
 import { useStore } from '../../store/StoreContext';
 import { useConfirm } from '../../hooks/useConfirm';
-import { DeleteButton, Slide, TrashIcon } from '../Slider/Slider.styled';
 
 const FilesProperties = {
   photos: {
@@ -25,13 +29,22 @@ export const FileInput = ({ type, onlySlider = false }) => {
   const { files, loadFiles, saveFile, deleteFile } = useStore();
   const [Confirm, setConfirm] = useConfirm();
   const UploadRef = useRef(null);
+  const [isMoreThanTen, setIsMoreThanTen] = useState(false);
 
   useEffect(() => {
     loadFiles(type);
   }, []);
 
   const handleFileChange = async (e) => {
-    const selectedFiles = Array.from(e.target.files);
+    let selectedFiles = Array.from(e.target.files);
+
+    if (
+      selectedFiles?.length > 10 ||
+      files[type]?.length + selectedFiles?.length > 10
+    ) {
+      setIsMoreThanTen(true);
+      selectedFiles = selectedFiles.slice(0, 10 - files[type]?.length);
+    }
 
     selectedFiles.forEach(async (file) => {
       try {
@@ -50,6 +63,7 @@ export const FileInput = ({ type, onlySlider = false }) => {
       dismissText: 'Отменить',
     }).then(
       async () => {
+        setIsMoreThanTen(false);
         await deleteFile(fileName, type);
       },
       () => {}
@@ -94,16 +108,25 @@ export const FileInput = ({ type, onlySlider = false }) => {
               multiple
               style={{ display: 'none' }}
             />
-            <Button variant="secondary" onClick={chooseFiles}>
+            <Button
+              variant="secondary"
+              onClick={chooseFiles}
+              isDisabled={files[type]?.length >= 10}
+            >
               <AddPhotoIcon />
               {files[type] && files[type].length > 0
                 ? 'Добавить ещё фото/видео'
                 : 'Добавить фото/видео'}
             </Button>
-            <InputWarning>
-              {files[type] && files[type].length === 10
-                ? 'Загружено макс. количество: 10 фото/видео'
-                : 'Макс. количество: 10 фото/видео'}
+            <InputWarning isError={isMoreThanTen}>
+              {isMoreThanTen && <AlertIcon />}
+              <div>
+                {isMoreThanTen
+                  ? 'Загружены только первые 10 фото/видео т.к. при загрузке было выбрано большее количество.'
+                  : files[type] && files[type]?.length === 10
+                    ? 'Загружено макс. количество: 10 фото/видео'
+                    : 'Макс. количество: 10 фото/видео'}
+              </div>
             </InputWarning>
           </>
         )}

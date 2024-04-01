@@ -13,12 +13,12 @@ export const Header = () => {
   const { state, setState, requestData } = useStore();
 
   const openRequestModal = () => {
-    // if (requestData.object_id) {
-    setState({
-      ...state,
-      isRequestModalOpen: true,
-    });
-    // }
+    if (requestData.object_id) {
+      setState({
+        ...state,
+        isRequestModalOpen: true,
+      });
+    }
   };
 
   return (

@@ -29,16 +29,6 @@ export const ModalContent = styled.div`
     0 0 10px 6px #0f17280a;
 `;
 
-export const ModalDrag = styled.div`
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 72px;
-  height: 4px;
-  background-color: #e4e8ee;
-`;
-
 export const ModalHeader = styled.div`
   padding: 24px;
   display: flex;

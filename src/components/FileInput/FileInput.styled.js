@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { addPhotoSVG } from '../../assets';
 import { ReactComponent as trashSVG } from '../../assets/trash.svg';
+import { ReactComponent as informationSVG } from '../../assets/information-circle.svg';
 
 export const Wrapper = styled.div`
   position: relative;
@@ -38,10 +39,13 @@ export const Wrapper = styled.div`
 `;
 
 export const InputWarning = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 13px;
   font-weight: 400;
   line-height: 16px;
-  color: #697180;
+  color: ${(props) => (props.isError ? '#E53E3E' : '#697180')};
 `;
 
 export const AddPhotoIcon = styled.img.attrs({ src: addPhotoSVG })`
@@ -72,5 +76,16 @@ export const FullscreenWrapper = styled.div`
   img {
     width: 100vw;
     object-fit: contain;
+  }
+`;
+
+export const AlertIcon = styled(informationSVG)`
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
+
+  & path {
+    fill: #e53e3e;
   }
 `;

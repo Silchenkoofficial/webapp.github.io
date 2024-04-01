@@ -40,19 +40,18 @@ export const Slide = styled.div`
 export const DeleteButton = styled.div`
   padding: 4px;
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 48px;
-  height: 48px;
+  bottom: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+  background-color: #fff;
+  border-radius: 4px;
 `;
 
 export const TrashIcon = styled(trashSVG)`
-  padding: 4px;
-  width: 24px;
-  height: 24px;
-  background-color: #fff;
-  border-radius: 4px;
+  width: 16px;
+  height: 16px;
 `;

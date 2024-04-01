@@ -5,7 +5,7 @@ import { ArrowIcon, StatusCircle, Textarea, Wrapper } from './Step2.styled';
 import { Statuses } from '../../../../constants';
 import { StepWrapper } from '../../Form.styled';
 
-export const Step2 = ({ visible, updateCompletion }) => {
+export const Step2 = ({ visible }) => {
   const { state, setState } = useStore();
   const [isSelectOpen, setIsSelectOpen] = useState();
 
@@ -14,8 +14,6 @@ export const Step2 = ({ visible, updateCompletion }) => {
     setState({
       ...state,
       status: value,
-      description: value === 'transfer' ? '' : state.description,
-      transferDate: '',
     });
   };
 
