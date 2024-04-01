@@ -1,0 +1,41 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+}
+
+html {
+  background: #f8f9fa;
+}
+
+body {
+  position: relative;
+  background: #f8f9fa;
+  font-family: 'Roboto', sans-serif !important;
+}
+
+input,
+textarea,
+button,
+select {
+  font-family: 'Roboto', sans-serif !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+}
+
+input:disabled {
+  opacity: 0.5 !important;
+}
