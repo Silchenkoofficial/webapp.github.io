@@ -7,7 +7,7 @@ export const FullscreenWrapper = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 101vh;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 1);
   z-index: 99;
   overflow-y: scroll;
@@ -36,7 +36,7 @@ export const FullscreenSlide = styled.div`
   position: relative;
   width: fit-content;
   max-width: 100%;
-  height: 100%;
+  height: 101%;
   display: flex;
   align-items: center;
   border: none;
