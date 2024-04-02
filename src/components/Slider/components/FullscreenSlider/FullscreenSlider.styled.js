@@ -10,6 +10,7 @@ export const FullscreenWrapper = styled.div`
   height: 101vh;
   background-color: rgba(0, 0, 0, 1);
   z-index: 99;
+  overflow-y: scroll;
 
   .delete-button {
     width: 36px;
