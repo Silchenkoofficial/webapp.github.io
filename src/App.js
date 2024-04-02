@@ -6,7 +6,10 @@ import { StoreProvider } from './store/StoreContext';
 export const App = () => {
     const tg = window?.Telegram?.WebApp;
     if (tg) {
-        tg.onEvent('viewportChanged', () => tg.expand());
+        tg.onEvent('viewportChanged', () => {
+            tg.expand();
+            console.log(this.viewportHeight)
+        });
     }
 	
   return (
