@@ -8,7 +8,7 @@ export const App = () => {
     if (tg) {
         tg.onEvent('viewportChanged', () => {
             tg.expand();
-            console.log(this.viewportHeight)
+            alert(this.viewportHeight)
         });
     }
 	
