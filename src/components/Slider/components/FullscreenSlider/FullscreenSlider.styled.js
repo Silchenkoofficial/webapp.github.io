@@ -7,7 +7,7 @@ export const FullscreenWrapper = styled.div`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 101vh;
   background-color: rgba(0, 0, 0, 1);
   z-index: 99;
 

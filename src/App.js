@@ -4,14 +4,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { StoreProvider } from './store/StoreContext';
 
 export const App = () => {
-    const tg = window?.Telegram?.WebApp;
-    if (tg) {
-        tg.onEvent('viewportChanged', () => {
-            tg.expand();
-            alert(this.viewportHeight)
-        });
-    }
-	
   return (
     <StoreProvider>
       <Router>
