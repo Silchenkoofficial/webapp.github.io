@@ -62,19 +62,23 @@ export const FullscreenSlider = ({
             )}
           </TrashWrapper>
         </FullscreenHeader>
-        <ReactSlick {...settings} className={'slider-container'}>
-          {React.Children.map(children, (child, index) => {
-            return (
-              <FullscreenSlide
-                key={index}
-                ref={slideRefs.current[index]}
-                onClick={(e) => setIsHeaderShow((prev) => !prev)}
-              >
-                {child}
-              </FullscreenSlide>
-            );
-          })}
-        </ReactSlick>
+        <div style={{
+          height: "100.1vh"
+        }}>
+          <ReactSlick {...settings} className={'slider-container'}>
+            {React.Children.map(children, (child, index) => {
+              return (
+                  <FullscreenSlide
+                      key={index}
+                      ref={slideRefs.current[index]}
+                      onClick={(e) => setIsHeaderShow((prev) => !prev)}
+                  >
+                    {child}
+                  </FullscreenSlide>
+              );
+            })}
+          </ReactSlick>
+        </div>
       </FullscreenWrapper>
     </Portal>
   );

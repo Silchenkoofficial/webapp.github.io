@@ -36,7 +36,7 @@ export const FullscreenSlide = styled.div`
   position: relative;
   width: fit-content;
   max-width: 100%;
-  height: 101%;
+  height: 100%;
   display: flex;
   align-items: center;
   border: none;
@@ -45,9 +45,9 @@ export const FullscreenSlide = styled.div`
   & > img,
   & > video {
     width: 100%;
-    height: 90%;
-    object-fit: cover;
-    object-position: center;
+    height: 100vh;
+    object-fit: contain;
+    object-position: top;
     border-radius: 8px;
   }
 `;
