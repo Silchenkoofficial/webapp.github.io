@@ -37,7 +37,7 @@ export const API = {
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
-      credentials: 'include',
+      credentials: 'omit',
       body: params ? JSON.stringify(params) : undefined,
     }),
   delete: (url, id) =>
@@ -72,7 +72,7 @@ export const API = {
       {
         method: 'PATCH',
         credentials: 'omit',
-        body: data,
+        body: data || {},
       }
     ),
   patchFiles: (url, id, params) =>

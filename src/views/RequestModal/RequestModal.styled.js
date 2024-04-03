@@ -1,5 +1,11 @@
 import styled from 'styled-components';
-import { closeSVG } from '../../assets';
+import {
+  closeSVG,
+  phoneSVG,
+  telegramSVG,
+  viberSVG,
+  whatsappSVG,
+} from '../../assets';
 
 export const Wrapper = styled.div`
   position: fixed;
@@ -82,17 +88,97 @@ export const CloseIcon = styled.img.attrs({ src: closeSVG })`
   height: 24px;
 `;
 
-export const RequestPhotos = styled.div`
+export const ContactWrapper = styled.div`
+  padding: 12px;
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
-  gap: 8px;
-  overflow-x: scroll;
+  justify-content: space-between;
+  background-color: #eef5fe;
+  border-radius: 8px;
+
+  & > div {
+    flex: 1;
+    text-align: center;
+  }
+`;
+
+export const PhoneText = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #2d67d8 !important;
+
+  &:link,
+  &:visited,
+  &:hover,
+  &:active {
+    color: #2d67d8 !important;
+  }
+`;
+
+export const PhoneIcon = styled.img.attrs({ src: phoneSVG })`
+  width: 16px;
+  height: 16px;
+`;
+
+export const ContactDivider = styled.span`
+  display: block;
+  width: 2px;
+  height: 100%;
+  background-color: #fff;
+`;
+
+export const SocialWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+`;
+export const SocialBlock = styled.div`
+  flex: 1;
+  padding: 10px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 4px;
+  background-color: ${(props) => (props.isActive ? '#eef5fe' : '#F8F9FA')};
+  pointer-events: ${(props) => (props.isActive ? 'none' : 'auto')};
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
 
   img {
-    flex-shrink: 0;
-    width: 80%;
-    height: 268px;
-    object-fit: cover;
+    filter: grayscale(${(props) => (props.isActive ? '0' : '100')}%);
+  }
+
+  & > * {
+    pointer-events: none;
+  }
+`;
+
+export const WhatsAppIcon = styled.img.attrs({ src: whatsappSVG })``;
+export const TelegramIcon = styled.img.attrs({ src: telegramSVG })``;
+export const ViberIcon = styled.img.attrs({ src: viberSVG })``;
+
+export const EmptyPhotoWrapper = styled.div`
+  height: 268px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  & p {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #697180;
   }
 `;

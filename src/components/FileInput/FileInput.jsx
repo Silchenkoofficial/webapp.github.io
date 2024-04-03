@@ -9,24 +9,11 @@ import {
 import { Slider } from '../../components';
 import { useStore } from '../../store/StoreContext';
 import { useConfirm } from '../../hooks/useConfirm';
-
-const FilesProperties = {
-  photos: {
-    folder: 'start_photos',
-    bot: 'photos_tg_bot',
-  },
-  attachments: {
-    folder: 'attachments',
-    bot: 'attachments_tg_bot',
-  },
-  acts: {
-    folder: 'acts',
-    bot: 'completion_act_files_tg_bot',
-  },
-};
+import { sendRequestWithPhoto } from '../../http-requests';
 
 export const FileInput = ({ type, onlySlider = false }) => {
-  const { files, loadFiles, saveFile, deleteFile } = useStore();
+  const { formData, files, requestData, loadFiles, saveFile, deleteFile } =
+    useStore();
   const [Confirm, setConfirm] = useConfirm();
   const UploadRef = useRef(null);
   const [isMoreThanTen, setIsMoreThanTen] = useState(false);
@@ -47,10 +34,42 @@ export const FileInput = ({ type, onlySlider = false }) => {
     }
 
     selectedFiles.forEach(async (file) => {
-      try {
-        await saveFile(file, type);
-      } catch (err) {
-        alert(`${file.name} - ${err}`);
+      if (type === 'acts') {
+        const fileNameWithoutExtension = file.name.slice(
+          0,
+          file.name.lastIndexOf('.')
+        );
+        const data = new FormData();
+        data.append('file', file);
+
+        sendRequestWithPhoto(
+          requestData.object_id,
+          {
+            status: 'finish',
+            worker: requestData.executor.object_id,
+            comment: formData.description,
+            filename: fileNameWithoutExtension,
+          },
+          data
+        )
+          .then(async (res) => {
+            if (res.status === 'OK') {
+              try {
+                await saveFile(file, type);
+              } catch (err) {
+                alert(`${file.name} - ${err}`);
+              }
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        try {
+          await saveFile(file, type);
+        } catch (err) {
+          alert(`${file.name} - ${err}`);
+        }
       }
     });
   };

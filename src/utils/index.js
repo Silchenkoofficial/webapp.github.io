@@ -1,5 +1,11 @@
 import { API } from './api';
-import { getStatusColor } from './common';
+import { getStatusColor, formatPhone } from './common';
 import { getImageDimensions, getVideoDuration } from './file';
 
-export { API, getStatusColor, getImageDimensions, getVideoDuration };
+export {
+  API,
+  getStatusColor,
+  getImageDimensions,
+  getVideoDuration,
+  formatPhone,
+};

@@ -9,7 +9,7 @@
 html,
 body {
   height: 100%;
-  overflow: hidden;
+  /*overflow: hidden;*/
   touch-action: none;
 }
 
@@ -38,4 +38,15 @@ textarea:focus {
 
 input:disabled {
   opacity: 0.5 !important;
+}
+
+a,
+a:hover,
+a:active,
+a:focus,
+a:link,
+a:visited {
+  text-decoration: none !important;
+  color: inherit !important;
+  outline: none !important;
 }

@@ -23,7 +23,7 @@ export const Slider = memo(({ children, onDelete }) => {
                   <DeleteButton
                     onClick={(e) => {
                       e.stopPropagation();
-                      onDelete(child.props['data-file'].name);
+                      onDelete(child.props['data-file']);
                     }}
                   >
                     <TrashIcon />

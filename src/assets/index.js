@@ -3,3 +3,8 @@ export { default as addPhotoSVG } from './add-photo.svg';
 export { default as closeSVG } from './close.svg';
 export { default as trashSVG } from './trash.svg';
 export { default as calendarSVG } from './calendar.svg';
+export { default as phoneSVG } from './phone-call.svg';
+export { default as whatsappSVG } from './whatsapp.svg';
+export { default as telegramSVG } from './telegram.svg';
+export { default as viberSVG } from './viber.svg';
+export { default as emptyPhoto } from './empty-photo.png';

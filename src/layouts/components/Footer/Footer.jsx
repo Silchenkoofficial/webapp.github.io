@@ -1,31 +1,38 @@
-import { Button } from '../../../components';
-import { Wrapper } from './Footer.styled';
 import { useStore } from '../../../store/StoreContext';
-import { useMemo } from 'react';
-import {clearIndexedDB} from "../../../store/IndexedDBService";
+import { clearIndexedDB } from '../../../store/IndexedDBService';
+import { changeNote, sendRequestWithoutPhoto } from '../../../http-requests';
+import { Wrapper } from './Footer.styled';
+import { Button } from '../../../components';
 
 export const Footer = () => {
-  const { state, setState } = useStore();
+  const { formData, setFormData, requestData } = useStore();
 
-  const nextButtonDisabled = () => {
-    switch (state.currentStep) {
+  const isNextButtonDisabled = () => {
+    const {
+      currentStep,
+      photos,
+      status,
+      transferDate,
+      description,
+      attachments,
+      acts,
+    } = formData;
+
+    switch (currentStep) {
       case 1:
-        return state.photos === '';
+        return !photos;
       case 2:
-        if (state.status === 'transfer') {
-          return state.transferDate === '';
+        if (status === 'transfer') {
+          return !transferDate;
         }
-        return state.status === 'run' || state.description.length < 3;
+        return status === 'run' || description.length < 3;
       case 3:
-        if (state.status === 'performed') {
-          return (
-            state.attachments === '' ||
-            state.acts === ''
-          );
-        } else if (state.status === 'delayed') {
-          return state.attachments === '' || state.transferDate === '';
+        if (status === 'performed') {
+          return !attachments || !acts;
+        } else if (status === 'delayed') {
+          return !attachments || !transferDate;
         }
-        return state.attachments === '';
+        return !attachments;
       case 4:
         return false;
       default:
@@ -33,8 +40,8 @@ export const Footer = () => {
     }
   };
 
-  const nextButtonText = () => {
-    switch (state.currentStep) {
+  const getNextButtonText = () => {
+    switch (formData.currentStep) {
       case 1:
       case 2:
         return 'Следующий шаг';
@@ -47,39 +54,112 @@ export const Footer = () => {
     }
   };
 
-  const nextStep = () => {
-    if (state.currentStep > 3) {
-      alert(1);
-      localStorage.clear();
-      clearIndexedDB();
+  const handleFinalStep = async () => {
+    const requestID = requestData.object_id;
+    const workerID = requestData.executor.object_id;
+    const params = {
+      status: formData.status === 'performed' ? 'finish' : formData.status,
+      worker: workerID,
+      comment: formData.status === 'transfer' ? '' : formData.description,
+    };
+
+    if (['transfer', 'delayed'].includes(formData.status)) {
+      const [year, month, day] = formData.transferDate.split('-');
+      params.month = +month;
+      params.day = +day;
+    }
+
+    try {
+      const res = await sendRequestWithoutPhoto(requestID, params);
+
+      if (res.status !== 'OK') {
+        alert('Ошибка при завершении работы');
+        localStorage.clear();
+        await clearIndexedDB();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleIntermediateStep = async () => {
+    setFormData({ ...formData, currentStep: formData.currentStep + 1 });
+  };
+
+  const updateNotesIfNeeded = async () => {
+    const notesToUpdate = [];
+    const requestID = requestData.object_id;
+    const workerID = requestData.executor.object_id;
+
+    if (formData.currentStep === 1) {
+      if (['no_way_to_add', 'not_required'].includes(formData.photos)) {
+        notesToUpdate.push(
+          changeNote(requestID, {
+            worker: workerID,
+            field: 'photos_tg_bot_notes',
+            note: formData.photos,
+          })
+        );
+      }
+    }
+
+    if (formData.currentStep === 3) {
+      if (['no_way_to_add', 'not_required'].includes(formData.attachments)) {
+        notesToUpdate.push(
+          changeNote(requestID, {
+            worker: workerID,
+            field: 'attachments_tg_bot_notes',
+            note: formData.attachments,
+          })
+        );
+      }
+
+      if (['uploaded_later', 'not_required'].includes(formData.acts)) {
+        notesToUpdate.push(
+          changeNote(requestID, {
+            worker: workerID,
+            field: 'completion_act_files_tg_bot_notes',
+            note: formData.acts,
+          })
+        );
+      }
+    }
+
+    try {
+      await Promise.all(notesToUpdate);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const nextStep = async () => {
+    if (formData.currentStep >= 4) {
+      await handleFinalStep();
     } else {
-      setState({
-        ...state,
-        currentStep: state.currentStep + 1,
-      });
+      await updateNotesIfNeeded();
+      await handleIntermediateStep();
     }
   };
 
   const prevStep = () => {
-    setState({
-      ...state,
-      currentStep: state.currentStep - 1,
-    });
+    if (formData.currentStep > 1) {
+      setFormData({ ...formData, currentStep: formData.currentStep - 1 });
+    }
   };
 
   return (
     <Wrapper>
       <Button
-        isDisabled={nextButtonDisabled()}
+        isDisabled={isNextButtonDisabled()}
         variant={'primary'}
         onClick={nextStep}
       >
-        {nextButtonText()}
+        {getNextButtonText()}
       </Button>
       <Button
         variant={'secondary'}
         onClick={prevStep}
-        className={state.currentStep === 1 && 'hidden'}
+        className={formData.currentStep === 1 && 'hidden'}
       >
         Назад
       </Button>

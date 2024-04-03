@@ -6,36 +6,25 @@ import { RequestModal } from '../views';
 import usePortal from 'react-useportal';
 import { useParams } from 'react-router-dom';
 import { getRequestData } from '../http-requests';
-import { saveFileToIndexedDB } from '../store/IndexedDBService';
+import { clearIndexedDB } from '../store/IndexedDBService';
 
 export const AppLayout = () => {
   const { pk } = useParams();
-  const { state, files, loadFiles, saveFile } = useStore();
+  const { requestData, setRequestData, clearFormData, loadFiles } = useStore();
   const { Portal } = usePortal();
   const modalContentRef = useRef(null);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
   useEffect(() => {
     getRequestData(pk)
-      .then((requestData) => {
-        localStorage.setItem('requestData', JSON.stringify(requestData));
-
-        loadFiles('photos_show').then((loadedFiles) => {
-          const filesFromDB = loadedFiles.map((el) => el.name) || [];
-          requestData.photos.forEach((photo) => {
-            if (!filesFromDB.includes(photo + '.jpg')) {
-              requestData.photos.forEach((photo) => {
-                fetch(`/media/photos_show/${photo}.jpg`)
-                  .then((res) => res.blob())
-                  .then((blob) => {
-                    const file = new File([blob], `${photo}.jpg`, {
-                      type: 'image/jpeg',
-                    });
-                    return saveFileToIndexedDB(file, 'photos_show');
-                  });
-              });
-            }
+      .then((response) => {
+        if (requestData.object_id !== response.object_id) {
+          clearFormData();
+          clearIndexedDB().then(() => {
+            loadFiles('photos');
           });
-        });
+        }
+        setRequestData(response);
       })
       .catch((err) => {
         console.log(err);
@@ -44,13 +33,17 @@ export const AppLayout = () => {
 
   return (
     <>
-      <LayoutWrapper isRequestModalOpen={state.isRequestModalOpen}>
-        <Header />
+      <LayoutWrapper isRequestModalOpen={isRequestModalOpen}>
+        <Header setIsRequestModalOpen={setIsRequestModalOpen} />
         <MainContent />
         <Footer />
       </LayoutWrapper>
       <Portal>
-        <RequestModal modalContentRef={modalContentRef} />
+        <RequestModal
+          modalContentRef={modalContentRef}
+          isRequestModalOpen={isRequestModalOpen}
+          setIsRequestModalOpen={setIsRequestModalOpen}
+        />
       </Portal>
     </>
   );

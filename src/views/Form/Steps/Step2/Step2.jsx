@@ -6,21 +6,20 @@ import { Statuses } from '../../../../constants';
 import { StepWrapper } from '../../Form.styled';
 
 export const Step2 = ({ visible }) => {
-  const { state, setState } = useStore();
+  const { formData, setFormData } = useStore();
   const [isSelectOpen, setIsSelectOpen] = useState();
 
   const handleSelectChange = (value) => {
-    console.log(value);
-    setState({
-      ...state,
+    setFormData({
+      ...formData,
       status: value,
     });
   };
 
   const handleChangeDescription = (e) => {
     e.preventDefault();
-    setState({
-      ...state,
+    setFormData({
+      ...formData,
       description: e.target.value,
     });
   };
@@ -31,31 +30,33 @@ export const Step2 = ({ visible }) => {
         <Card.Title>Смените статус для продолжения работы</Card.Title>
         <Select
           options={Statuses}
-          selectedValue={Statuses.find((el) => el.value === state.status).value}
+          selectedValue={
+            Statuses.find((el) => el.value === formData.status).value
+          }
           onChange={handleSelectChange}
           onFocus={() => setIsSelectOpen(true)}
           onBlur={() => setIsSelectOpen(false)}
-          leftIcon={<StatusCircle status={state.status} />}
+          leftIcon={<StatusCircle status={formData.status} />}
           rightIcon={
-            <ArrowIcon status={state.status} isSelectOpen={isSelectOpen} />
+            <ArrowIcon status={formData.status} isSelectOpen={isSelectOpen} />
           }
         />
       </Card>
-      {state.status !== 'transfer' && (
+      {formData.status !== 'transfer' && (
         <Card>
           <Card.Title>
-            {state.status === 'delayed'
+            {formData.status === 'delayed'
               ? 'Введите описание причины переноса'
               : 'Введите описание выполненных работ'}
           </Card.Title>
           <Textarea
             placeholder={'Введите описание'}
             onChange={handleChangeDescription}
-            value={state.description}
+            value={formData.description}
           ></Textarea>
         </Card>
       )}
-      {['transfer'].includes(state.status) && (
+      {['transfer'].includes(formData.status) && (
         <Card>
           <Card.Title>Укажите дату переноса</Card.Title>
           <Datepicker />
