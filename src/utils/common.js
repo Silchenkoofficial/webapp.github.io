@@ -37,3 +37,14 @@ export const getStatusColor = (status) => {
       };
   }
 };
+
+export const formatPhone = (phone) => {
+  if (!phone) return 'Неизвестный';
+
+  let a = phone.split('');
+  a.splice(1, 0, ' (');
+  a.splice(5, 0, ') ');
+  a.splice(9, 0, '-');
+  a.splice(12, 0, '-');
+  return a.join('');
+};

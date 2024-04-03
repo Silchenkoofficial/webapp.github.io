@@ -5,11 +5,11 @@ import { useStore } from '../../../../store/StoreContext';
 import { StepWrapper } from '../../Form.styled';
 
 export const Step1 = ({ visible }) => {
-  const { state, setState } = useStore();
+  const { formData, setFormData } = useStore();
 
   const handleChange = (event) => {
-    setState({
-      ...state,
+    setFormData({
+      ...formData,
       photos: event.target.value,
     });
   };
@@ -18,12 +18,12 @@ export const Step1 = ({ visible }) => {
     <StepWrapper visible={visible}>
       <Card>
         <Card.Title>Загрузите фото/видео начала работ</Card.Title>
-        {state.photos !== 'mediaFiles' && (
+        {formData.photos !== 'mediaFiles' && (
           <RadioGroup
             name={'photos'}
             options={photosOptions}
             onChange={handleChange}
-            selectedValue={state.photos}
+            selectedValue={formData.photos}
           />
         )}
         <FileInput type={'photos'} />

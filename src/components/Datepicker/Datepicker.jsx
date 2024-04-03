@@ -8,7 +8,7 @@ import {
 import { useStore } from '../../store/StoreContext';
 
 export const Datepicker = () => {
-  const { state, setState } = useStore();
+  const { formData, setFormData } = useStore();
   const inputRef = useRef(null);
 
   const currentDate = new Date();
@@ -18,8 +18,8 @@ export const Datepicker = () => {
 
   const handleChange = (e) => {
     const selectedDate = e.target.value;
-    setState({
-      ...state,
+    setFormData({
+      ...formData,
       transferDate:
         selectedDate < nextDayString ? nextDayString : e.target.value,
     });
@@ -31,11 +31,12 @@ export const Datepicker = () => {
         ref={inputRef}
         type="date"
         min={nextDayString}
-        value={state.transferDate}
+        value={formData.transferDate}
         onChange={handleChange}
       />
       <DateText>
-        {state.transferDate?.split('-').reverse().join('.') || 'Выберите дату'}
+        {formData.transferDate?.split('-').reverse().join('.') ||
+          'Выберите дату'}
       </DateText>
       <CalendarIcon />
     </InputWrapper>

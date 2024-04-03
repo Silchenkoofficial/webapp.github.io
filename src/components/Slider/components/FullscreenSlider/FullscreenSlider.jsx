@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import usePortal from 'react-useportal';
 import ReactSlick from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -37,6 +37,14 @@ export const FullscreenSlider = ({
     }
   }, [])
 
+  useEffect(() => {
+    tg.BackButton.isVisible = true;
+    tg.onClick(() => {
+      tg.BackButton.isVisible = false;
+      setIsFullscreen(false);
+    });
+  }, []);
+
   const settings = {
     dots: false,
     infinite: false,
@@ -49,7 +57,7 @@ export const FullscreenSlider = ({
   };
 
   const handleDelete = (index) => {
-    onDelete(children[index].props['data-file'].name);
+    onDelete(children[index].props['data-file']);
   };
 
   const closeFullscreen = () => {
@@ -73,19 +81,21 @@ export const FullscreenSlider = ({
             )}
           </TrashWrapper>
         </FullscreenHeader>
-        <div style={{
-          height: "100.1vh"
-        }}>
+        <div
+          style={{
+            height: '100.1vh',
+          }}
+        >
           <ReactSlick {...settings} className={'slider-container'}>
             {React.Children.map(children, (child, index) => {
               return (
-                  <FullscreenSlide
-                      key={index}
-                      ref={slideRefs.current[index]}
-                      onClick={() => setIsHeaderShow((prev) => !prev)}
-                  >
-                    {child}
-                  </FullscreenSlide>
+                <FullscreenSlide
+                  key={index}
+                  ref={slideRefs.current[index]}
+                  onClick={(e) => setIsHeaderShow((prev) => !prev)}
+                >
+                  {child}
+                </FullscreenSlide>
               );
             })}
           </ReactSlick>

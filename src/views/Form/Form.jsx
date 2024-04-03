@@ -6,12 +6,12 @@ import { FinalStep, Step1, Step2, Step3 } from './Steps';
 const Steps = [Step1, Step2, Step3, FinalStep];
 
 export const Form = () => {
-  const { state, setState } = useStore();
+  const { formData } = useStore();
 
   return (
-    <Wrapper currentStep={state.currentStep}>
+    <Wrapper currentStep={formData.currentStep}>
       {Steps.map((Step, index) => (
-        <Step key={index} visible={state.currentStep === index + 1} />
+        <Step key={index} visible={formData.currentStep === index + 1} />
       ))}
     </Wrapper>
   );

@@ -10,21 +10,20 @@ import {
 } from '../../../../constants/radioOptions';
 import { useStore } from '../../../../store/StoreContext';
 import { StepWrapper } from '../../Form.styled';
-import { Wrapper } from './Step3.styled';
 
 export const Step3 = ({ visible }) => {
-  const { state, setState } = useStore();
+  const { formData, setFormData } = useStore();
 
   const handleChange = (event) => {
-    setState({
-      ...state,
+    setFormData({
+      ...formData,
       [event.target.name]: event.target.value,
     });
   };
 
   return (
     <StepWrapper visible={visible}>
-      {['delayed'].includes(state.status) && (
+      {['delayed'].includes(formData.status) && (
         <Card>
           <Card.Title>Укажите дату переноса</Card.Title>
           <Datepicker />
@@ -32,25 +31,25 @@ export const Step3 = ({ visible }) => {
       )}
       <Card>
         <Card.Title>Загрузите фото/видео выполненных работ</Card.Title>
-        {state.attachments !== 'mediaFiles' && (
+        {formData.attachments !== 'mediaFiles' && (
           <RadioGroup
             name={'attachments'}
             options={attachmentsOptions}
             onChange={handleChange}
-            selectedValue={state.attachments}
+            selectedValue={formData.attachments}
           />
         )}
         <FileInput type={'attachments'} />
       </Card>
-      {state.status === 'performed' && (
+      {formData.status === 'performed' && (
         <Card>
           <Card.Title>Загрузите акт выполненных работ</Card.Title>
-          {state.acts !== 'mediaFiles' && (
+          {formData.acts !== 'mediaFiles' && (
             <RadioGroup
               name={'acts'}
               options={actsOptions}
               onChange={handleChange}
-              selectedValue={state.acts}
+              selectedValue={formData.acts}
             />
           )}
           <FileInput type={'acts'} />

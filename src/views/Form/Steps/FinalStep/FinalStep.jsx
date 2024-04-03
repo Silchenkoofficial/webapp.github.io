@@ -1,4 +1,4 @@
-import {Card, FileInput, Slider} from '../../../../components';
+import { Card, FileInput, Slider } from '../../../../components';
 import { Statuses } from '../../../../constants';
 import {
   actsOptions,
@@ -10,7 +10,7 @@ import { StepWrapper } from '../../Form.styled';
 import { Text, StatusWrapper, StatusCircle } from './FinalStep.styled';
 
 export const FinalStep = ({ visible }) => {
-  const { state, setState } = useStore();
+  const { formData, setFormData } = useStore();
 
   return (
     <StepWrapper visible={visible}>
@@ -20,53 +20,55 @@ export const FinalStep = ({ visible }) => {
       </Text>
       <Card>
         <Card.Title>Фото/видео начала работ</Card.Title>
-        {state.photos === 'mediaFiles' ? (
-            <FileInput type={'photos'} onlySlider={true} />
+        {formData.photos === 'mediaFiles' ? (
+          <FileInput type={'photos'} onlySlider={true} />
         ) : (
           <Text>
-            {photosOptions.find((el) => el.value === state.photos)?.label || ''}
+            {photosOptions.find((el) => el.value === formData.photos)?.label ||
+              ''}
           </Text>
         )}
       </Card>
       <Card>
         <Card.Title>Статус заявки и описание</Card.Title>
-        <StatusWrapper status={state.status}>
-          <StatusCircle status={state.status} />
-          {Statuses.find((el) => el.value === state.status)?.label}
+        <StatusWrapper status={formData.status}>
+          <StatusCircle status={formData.status} />
+          {Statuses.find((el) => el.value === formData.status)?.label}
         </StatusWrapper>
         <Text>
-          {state.status !== 'transfer'
-            ? state.description
-            : state.transferDate?.split('-').reverse().join('.') || ''}
+          {formData.status !== 'transfer'
+            ? formData.description
+            : formData.transferDate?.split('-').reverse().join('.') || ''}
         </Text>
       </Card>
-      {state.status === 'delayed' && (
+      {formData.status === 'delayed' && (
         <Card>
           <Card.Title>Дата переноса работ</Card.Title>
           <Text>
-            {state.transferDate?.split('-').reverse().join('.') || ''}
+            {formData.transferDate?.split('-').reverse().join('.') || ''}
           </Text>
         </Card>
       )}
       <Card>
         <Card.Title>Фото/видео выполненных работ</Card.Title>
-        {state.attachments === 'mediaFiles' ? (
-            <FileInput type={'attachments'} onlySlider={true} />
+        {formData.attachments === 'mediaFiles' ? (
+          <FileInput type={'attachments'} onlySlider={true} />
         ) : (
           <Text>
-            {attachmentsOptions.find((el) => el.value === state.attachments)
+            {attachmentsOptions.find((el) => el.value === formData.attachments)
               ?.label || ''}
           </Text>
         )}
       </Card>
-      {state.status === 'performed' && (
+      {formData.status === 'performed' && (
         <Card>
           <Card.Title>Акт выполненных работ</Card.Title>
-          {state.acts === 'mediaFiles' ? (
-              <FileInput type={'acts'} onlySlider={true} />
+          {formData.acts === 'mediaFiles' ? (
+            <FileInput type={'acts'} onlySlider={true} />
           ) : (
             <Text>
-              {actsOptions.find((el) => el.value === state.acts)?.label || ''}
+              {actsOptions.find((el) => el.value === formData.acts)?.label ||
+                ''}
             </Text>
           )}
         </Card>
