@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import usePortal from 'react-useportal';
 import ReactSlick from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -21,10 +21,21 @@ export const FullscreenSlider = ({
   setSelectedIdx,
   setIsFullscreen,
 }) => {
+  const tg = Window.Telegram?.WebApp;
   const { Portal } = usePortal({ programmaticallyOpen: true });
   const [isHeaderShow, setIsHeaderShow] = useState(true);
   const slideRefs = useRef(children.map(() => React.createRef()));
   const backgroundRef = useRef(null);
+  
+  useEffect(() => {
+    if (tg) {
+      tg.BackButton.isVisible = true;
+      tg.onClick(() => {
+        tg.BackButton.isVisible = false;
+        setIsFullscreen(false);
+      });
+    }
+  }, [])
 
   const settings = {
     dots: false,
@@ -71,7 +82,7 @@ export const FullscreenSlider = ({
                   <FullscreenSlide
                       key={index}
                       ref={slideRefs.current[index]}
-                      onClick={(e) => setIsHeaderShow((prev) => !prev)}
+                      onClick={() => setIsHeaderShow((prev) => !prev)}
                   >
                     {child}
                   </FullscreenSlide>
